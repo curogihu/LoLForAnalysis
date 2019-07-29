@@ -6,6 +6,7 @@ import time
 import math
 
 import utility
+import pandas as pd
 
 
 def get_high_ranked_summoner_ids():
@@ -40,6 +41,44 @@ def get_high_ranked_summoner_ids():
 
     # make unique summoner ids in a file
     utility.delete_duplicated_records(utility.summoners_file_path, False)
+
+
+def get_account_id_2(file_path):
+    if file_path == utility.summoners_file_path:
+        with open(file_path) as f_summoners:
+            summoner_ids = f_summoners.readlines()
+            
+    else:
+        df = pd.read_csv(file_path)
+        summoner_ids = df['summonerId'].to_list()
+
+    get_account_id3(summoner_ids)
+
+
+def get_account_id3(summoner_ids):
+    cnt = 0
+    summonerIdsLen = len(summoner_ids)
+
+    with open(utility.accounts_file_path, 'w', encoding="UTF-8") as fAccounts:
+
+        for summonerId in summoner_ids:
+            summonerId = summonerId.replace("\n", "")
+
+            print("expected summonerId json = " + summonerId)
+            accountJson = utility.get_lol_account_json(utility.account_url, str(summonerId))
+
+            if accountJson == "" or accountJson == "429":
+                print("skipped summonerId json = " + summonerId)
+
+            else:
+                fAccounts.write(str(accountJson["accountId"]) + "\n")
+
+            cnt += 1
+
+            if cnt % 10 == 0:
+                # print(str(cnt) + " / " + str(summonerIdsLen) + " " + datetime.now().strftime("%Y/%m/%d %H:%M:%S"))
+                print('{0} / {1}, {2}'.format(cnt, summonerIdsLen, datetime.datetime.now().strftime("%Y/%m/%d %H:%M:%S")))
+
 
 
 def get_account_ids(summoner_file_path=utility.summoners_file_path):
