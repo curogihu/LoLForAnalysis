@@ -1,4 +1,8 @@
 import utility
+import getALLInfo as gai
+
+import time
+import math
 
 # Output Master and Challenger summoner ids to a files
 # 1. summonerChallenger.csv
@@ -36,5 +40,16 @@ with open(utility.general_summoners_file_path, 'w', encoding="UTF-8") as f_summo
 
 # make unique summoner ids in a file
 # utility.delete_duplicated_records(utility.summoners_file_path, False)
+
+gai.get_account_ids(utility.general_summoners_file_path)
+gai.get_game_ids()
+
+end_ut = math.floor(time.time()) * 1000
+
+# within 60 days
+first_ut = end_ut - (60 * 60 * 24 * 60 * 1000)
+
+gai.get_game_info(first_ut, end_ut)
+gai.get_game_timelines()
 
 

@@ -42,8 +42,8 @@ def get_high_ranked_summoner_ids():
     utility.delete_duplicated_records(utility.summoners_file_path, False)
 
 
-def get_account_ids():
-    with open(utility.summoners_file_path) as fSummoners:
+def get_account_ids(summoner_file_path=utility.summoners_file_path):
+    with open(summoner_file_path) as fSummoners:
         summonerIds = fSummoners.readlines()
 
     cnt = 0
@@ -227,8 +227,8 @@ if __name__ == "__main__":
     # within 60 days
     first_ut = end_ut - (60 * 60 * 24 * 60 * 1000)
 
- #   get_high_ranked_summoner_ids()
- #   get_account_ids()
- #   get_game_ids()
- #   get_game_info(first_ut, end_ut)
+    get_high_ranked_summoner_ids()
+    get_account_ids()
+    get_game_ids()
+    get_game_info(first_ut, end_ut)
     get_game_timelines()
